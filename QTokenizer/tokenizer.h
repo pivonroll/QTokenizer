@@ -1,20 +1,24 @@
 #ifndef QTOKENIZER_INTERNAL_TOKENIZER_H
 #define QTOKENIZER_INTERNAL_TOKENIZER_H
 
+#include "rulematcher.h"
+#include "tokenizer_global.h"
+
 #include <QString>
 
 namespace QTokenizer {
 namespace Internal {
 
-class RuleMatcher;
+class Token;
 
-class Tokenizer
+class QTOKENIZER_EXPORT Tokenizer
 {
 public:
     enum MatchResult
     {
-        NO_MATCH,   // neither rules match
-        MATCH       // found a matching rule
+        NO_MATCH = 0,   // neither rules match
+        MATCH,       // found a matching rule
+        DELIMITER
     };
 
     Tokenizer();
@@ -22,7 +26,7 @@ public:
     void addRule(const QRegExp &regExp, int tokenId);
     QString getSentence() const;
     void setSentence(const QString &sentence);
-    MatchResult match(int &tokenId);
+    MatchResult match(Token *&token);
 
     void setDelimiters(const QStringList &delimiters);
 

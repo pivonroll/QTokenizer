@@ -1,16 +1,26 @@
+QT += core
+
+TARGET = QTokenizer
 TEMPLATE = lib
 
-QT += core
-TARGET = QTokenizer
+DEFINES += QTOKENIZER_LIBRARY
 
 HEADERS += \
     tokenizer.h \
     rule.h \
     rules.h \
-    rulematcher.h
+    rulematcher.h \
+    tokenizer_global.h \
+    token.h
 
 SOURCES += \
     tokenizer.cpp \
 	rule.cpp \
 	rules.cpp \
-    rulematcher.cpp
+    rulematcher.cpp \
+    token.cpp
+
+unix {
+	target.path = /usr/lib
+	INSTALLS += target
+}

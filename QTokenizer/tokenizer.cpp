@@ -2,6 +2,7 @@
 
 #include "rule.h"
 #include "rulematcher.h"
+#include "token.h"
 
 namespace QTokenizer {
 namespace Internal {
@@ -27,30 +28,28 @@ void Tokenizer::setSentence(const QString &sentence)
     m_sentence = sentence;
 }
 
-Tokenizer::MatchResult Tokenizer::match(int &tokenId)
+Tokenizer::MatchResult Tokenizer::match(Token *&token)
 {
+    Q_UNUSED(token)
+
     if (m_previousMatch == NO_MATCH)
         return NO_MATCH;
 
-    QStringRef ref = m_sentence.rightRef(m_sentenceMatchOffset);
+    int matchCount = 0;
+    Rule *rule = m_ruleMatcher.findMatchingRule(m_sentence, m_sentenceMatchOffset, matchCount);
 
-    if (ref.string()) {
-        int matchCount;
-        Rule *rule = m_ruleMatcher.findMatchingRule(m_sentence.rightRef(m_sentenceMatchOffset), matchCount);
+    if (!rule)
+        return NO_MATCH;
 
-        if (!rule)
-            return NO_MATCH;
+    token = new Token(rule->tokenId(), rule->matchedString());
+    m_sentenceMatchOffset += matchCount;
 
-        tokenId = rule->tokenId();
-
-        return MATCH;
-        m_sentenceMatchOffset += matchCount;
-    }
+    return MATCH;
 }
 
 void Tokenizer::setDelimiters(const QStringList &delimiters)
 {
-    m_previousMatch.setDelimiters(delimiters);
+    m_ruleMatcher.setStringDelimiters(delimiters);
 }
 
 } // namespace Internal

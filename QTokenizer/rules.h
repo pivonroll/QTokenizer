@@ -14,7 +14,7 @@ public:
     Rules();
     int ruleCount() const;
     Rule *rule(int index) const;
-    bool addRule(Rule *rule);
+    void addRule(Rule *rule);
     void removeRule(Rule *rule);
 
 private:

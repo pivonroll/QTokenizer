@@ -15,17 +15,16 @@ void RuleMatcher::addRule(const QRegExp &regExp, int tokenId)
     m_rules.addRule(rule);
 }
 
-Rule *RuleMatcher::findMatchingRule(const QString &sentence, int &matchCount)
+Rule *RuleMatcher::findMatchingRule(const QString &sentence, int sentenceOffset, int &matchCount)
 {
-    Rule *rule = findRule(sentence, matchCount);
+    Rule *rule = findRule(sentence, sentenceOffset, matchCount);
 
     if (rule)
         return rule;
 
-    // if no rule was matched, we trimm delimiters from left of the sentence and try to match again
-    int trimmedCharCount = 0;
-    QString trimmedSentence = trimmerDelimiters(sentence, trimmedCharCount);
-    rule = findRule(trimmedSentence, matchCount);
+    // if no rule was matched, we eliminate delimiters from left of the sentence and try to match again
+    int trimmedCharCount = delimiterLengthCount(sentence, sentenceOffset);
+    rule = findRule(sentence, sentenceOffset + trimmedCharCount, matchCount);
 
     matchCount += trimmedCharCount;
 
@@ -37,7 +36,7 @@ void RuleMatcher::setStringDelimiters(const QStringList &delimiters)
     m_delimiters = delimiters;
 }
 
-Rule *RuleMatcher::findRule(const QString &sentence, int &matchCount)
+Rule *RuleMatcher::findRule(const QString &sentence, int sentenceOffset, int &matchCount)
 {
     for (int i = 0; i < m_rules.ruleCount(); ++i) {
         Rule *rule = m_rules.rule(i);
@@ -45,36 +44,33 @@ Rule *RuleMatcher::findRule(const QString &sentence, int &matchCount)
         if (!rule)
             continue;
 
-        int matchingPosition;
-        int matchCount;
+        int matchingPosition = rule->match(sentence, sentenceOffset, matchCount);
 
-        rule->match(sentence, matchingPosition, matchCount);
-
-        if (!matchingPosition)
+        if (matchingPosition == sentenceOffset)
             return rule;
     }
 
     return 0;
 }
 
-QString RuleMatcher::trimmerDelimiters(const QString &sentence, int trimmedCharCount) const
+int RuleMatcher::delimiterLengthCount(const QString &sentence, int offset) const
 {
-    QString trimmedSentence = sentence;
+    QString trimmedSentence = sentence.mid(offset);
 
     int delimiterLength = startsWithAnyDelimiter(trimmedSentence);
-    trimmedCharCount = delimiterLength;
+    int trimmedCharCount = 0;
 
     while (delimiterLength) {
-        trimmedSentence = trimmedSentence.left(delimiterLength);
+        trimmedSentence = trimmedSentence.mid(delimiterLength);
         trimmedCharCount += delimiterLength;
 
         delimiterLength = startsWithAnyDelimiter(trimmedSentence);
     }
 
-    return trimmedSentence;
+    return trimmedCharCount;
 }
 
-int RuleMatcher::startsWithAnyDelimiter(const QString &sentence)
+int RuleMatcher::startsWithAnyDelimiter(const QString &sentence) const
 {
     foreach (const QString &delimiter, m_delimiters) {
         if (sentence.startsWith(delimiter))

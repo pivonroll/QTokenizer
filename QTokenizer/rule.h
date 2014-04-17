@@ -12,12 +12,14 @@ public:
     Rule(const QRegExp &regExpr, int tokenId);
 
     int tokenId() const;
-    void match(const QString &sentence, int &matchPosition, int &matchCount);
+    int match(const QString &sentence, int sentenceOffset, int &matchCount);
     QRegExp rule() const;
+    QString matchedString() const;
 
 private:
     QRegExp m_regExpresion;
     int m_tokenId;
+    QString m_matchedString;
 };
 
 } // namespace Internal

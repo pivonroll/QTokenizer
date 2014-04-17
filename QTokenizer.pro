@@ -6,5 +6,8 @@
 
 TEMPLATE = subdirs
 
+CONFIG += ordered
+
 SUBDIRS += \
-	app QTokenizer
+	QTokenizer \
+	app

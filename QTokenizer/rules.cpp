@@ -21,7 +21,7 @@ Rule *Rules::rule(int index) const
     return 0;
 }
 
-bool Rules::addRule(Rule *rule)
+void Rules::addRule(Rule *rule)
 {
     m_rules.append(rule);
 }

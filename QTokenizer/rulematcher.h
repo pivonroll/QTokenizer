@@ -21,13 +21,13 @@ public:
     RuleMatcher();
     void addRule(const QRegExp &regExp, int tokenId);
 
-    Rule *findMatchingRule(const QString &sentence, int &matchCount);
+    Rule *findMatchingRule(const QString &sentence, int sentenceOffset, int &matchCount);
     void setStringDelimiters(const QStringList &delimiters);
 
 private:
-    Rule *findRule(const QString &sentence, int &matchCount);
-    QString trimmerDelimiters(const QString &sentence, int trimmedCharCount) const;
-    int startsWithAnyDelimiter(const QString &sentence);
+    Rule *findRule(const QString &sentence, int sentenceOffset, int &matchCount);
+    int delimiterLengthCount(const QString &sentence, int offset) const;
+    int startsWithAnyDelimiter(const QString &sentence) const;
 
     Rules m_rules;
     QStringList m_delimiters;
