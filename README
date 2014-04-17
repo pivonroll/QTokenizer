@@ -1,0 +1,3 @@
+This is a simple lexer built using QRegExp class from Qt framework.
+Lexer is located in a lib project QTokenizer.
+Example of how it is used is located in the sub-project app in main.cpp.
