@@ -17,8 +17,12 @@ public:
     void addRule(Rule *rule);
     void removeRule(Rule *rule);
 
+    void addDelimiter(Rule *rule);
+    void removeDelimiter(Rule *rule);
+
 private:
     QList<Rule *> m_rules;
+    int m_delimiterStart;
 };
 
 } // namespace Internal

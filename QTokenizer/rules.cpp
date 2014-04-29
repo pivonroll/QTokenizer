@@ -6,6 +6,7 @@ namespace QTokenizer {
 namespace Internal {
 
 Rules::Rules()
+    : m_delimiterStart(0)
 {
 }
 
@@ -23,10 +24,22 @@ Rule *Rules::rule(int index) const
 
 void Rules::addRule(Rule *rule)
 {
-    m_rules.append(rule);
+    m_rules.insert(m_delimiterStart, rule);
+    ++m_delimiterStart;
 }
 
 void Rules::removeRule(Rule *rule)
+{
+    m_rules.removeAll(rule);
+    --m_delimiterStart;
+}
+
+void Rules::addDelimiter(Rule *rule)
+{
+    m_rules.append(rule);
+}
+
+void Rules::removeDelimiter(Rule *rule)
 {
     m_rules.removeAll(rule);
 }

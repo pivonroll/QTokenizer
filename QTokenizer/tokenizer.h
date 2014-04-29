@@ -17,6 +17,7 @@ public:
     enum MatchResult
     {
         NO_MATCH = 0,   // neither rules match
+        UNMATCHED_CHARS_FOUND,
         MATCH,       // found a matching rule
         DELIMITER
     };
@@ -36,6 +37,8 @@ private:
 
     int m_sentenceMatchOffset;
     MatchResult m_previousMatch;
+
+    Rule *m_savedRule;
 };
 
 } // namespace Internal

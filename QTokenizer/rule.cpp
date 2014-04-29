@@ -3,10 +3,16 @@
 namespace QTokenizer {
 namespace Internal {
 
-Rule::Rule(const QRegExp &regExpr, int tokenId)
+Rule::Rule(RuleType ruleType, const QRegExp &regExpr, int tokenId)
     : m_regExpresion(regExpr),
-      m_tokenId(tokenId)
+      m_tokenId(tokenId),
+      m_ruleType(ruleType)
 {
+}
+
+Rule::RuleType Rule::type() const
+{
+    return m_ruleType;
 }
 
 int Rule::tokenId() const

@@ -9,8 +9,14 @@ namespace Internal {
 class Rule
 {
 public:
-    Rule(const QRegExp &regExpr, int tokenId);
+    enum RuleType {
+        TOKEN_RULE,
+        DELIMITER_RULE
+    };
 
+    Rule(RuleType ruleType, const QRegExp &regExpr, int tokenId);
+
+    RuleType type() const;
     int tokenId() const;
     int match(const QString &sentence, int sentenceOffset, int &matchCount);
     QRegExp rule() const;
@@ -20,6 +26,7 @@ private:
     QRegExp m_regExpresion;
     int m_tokenId;
     QString m_matchedString;
+    RuleType m_ruleType;
 };
 
 } // namespace Internal
